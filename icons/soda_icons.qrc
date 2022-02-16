@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>coke.png</file>
+    <file>mello.png</file>
+    <file>barqs.png</file>
+    <file>nc.png</file>
+  </qresource>
+</RCC>

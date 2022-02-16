@@ -1,0 +1,58 @@
+calibration: # ml/s
+- 0.982
+- 0.827
+- 0.956
+- 1.109
+- 0.942
+- 0.976
+- 1.061
+- 1.016
+flavors:
+- icon: coke.png
+  name: Coke
+  size: 5
+  pour:
+    - large: 100
+    - small: 50
+- icon: barqs.png
+  name: Barqs
+  size: 2.5
+  pour:
+    - large: 100
+    - small: 50
+- icon: mello.png
+  name: Mello Yellow
+  size: 2.5
+  pour:
+    - large: 100
+    - small: 50
+- icon: nc.png
+  name: NC
+  size: 0
+  pour:
+    - large: 100
+    - small: 50
+- icon: nc.png
+  name: NC
+  size: 0
+  pour:
+    - large: 100
+    - small: 50
+- icon: nc.png
+  name: NC
+  size: 0
+  pour:
+    - large: 100
+    - small: 50
+- icon: nc.png
+  name: NC
+  size: 0
+  pour:
+    - large: 100
+    - small: 50
+- icon: nc.png
+  name: NC
+  size: 0
+  pour:
+    - large: 100
+    - small: 50
