@@ -1,3 +1,5 @@
+import sys
+import signal
 from gui import SodaGui
 from config import SodaConfig
 from pump_controller import PumpController
@@ -10,7 +12,12 @@ class SodaController(object):
         self.pc = PumpController(self)
 
     def run(self):
+        signal.signal(signal.SIGINT, self.shutdown)
         self.gui.mainloop()
+
+    def shutdown(self, signal, frame):
+        self.pc.off(-1)
+        sys.exit(0)
 
 
 if __name__ == '__main__':

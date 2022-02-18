@@ -15,6 +15,7 @@ class SodaGui(tk.Tk):
 
         self.title("soda test")
         self.geometry("800x480")
+
         if os.name != 'nt':
             self.attributes('-fullscreen',True)
             self.config(cursor="none")

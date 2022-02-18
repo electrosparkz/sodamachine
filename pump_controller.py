@@ -22,6 +22,9 @@ class PumpController(object):
         self.latchline = 27
         self.dataline = 22
 
+        self.lockline = 23
+        self.enableline = 5
+
         self.bitstate = [0, 0, 0, 0, 0, 0, 0, 0]
 
         self.setup()
@@ -35,8 +38,16 @@ class PumpController(object):
 
     def setup(self):
         print("Setup pins")
-        GPIO.setup((self.clockline, self.latchline, self.dataline), GPIO.OUT)
+        GPIO.setup((self.clockline, self.latchline, self.dataline, self.lockline, self.enableline), GPIO.OUT)
         GPIO.output((self.clockline, self.latchline, self.dataline), 0)
+        GPIO.output(self.enableline, 0)  # active low
+
+        for i in range(3):
+            GPIO.output(self.lockline, 0)
+            time.sleep(.3)
+            GPIO.output(self.lockline, 1)
+            time.sleep(.3)
+        GPIO.output(self.lockline, 0)
 
     def bitloop(self):
         print("Start loop")
