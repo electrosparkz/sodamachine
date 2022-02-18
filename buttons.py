@@ -125,6 +125,10 @@ class FlavorInterfaceButtons(tk.Frame):
                  'sticky': 'nswe'})])
 
         self.progress_bar = ttk.Progressbar(self, orient=tk.HORIZONTAL, length=100, mode='determinate', style="LabeledProgressbar")
+        self.style.configure("LabeledProgressbar",
+                             text=f"Ready",
+                             font=self.pbar_font,
+                             background="green")
         self.progress_bar.grid(row=3, column=0, columnspan=4, sticky="nsew", padx=10, pady=10)
 
         self.place(anchor="c", relx=.5, rely=.55, relheight=.8, relwidth=.8)
@@ -167,7 +171,7 @@ class FlavorInterfaceButtons(tk.Frame):
         if self.state == "dispense":
             time_remaining = round(self.pump_runtime - (time.time() - self.dispense_started), 2)
             time_elapsed = round(time.time() - self.dispense_started, 2)
-            ml_remaining = round((time_remaining / self.ml_per_sec), 2)
+            ml_remaining = round((time_remaining * self.ml_per_sec), 2)
             pct_done = 100 - round((ml_remaining / self.dose) * 100)
 
             print(f"Remain: {time_remaining}/{time_elapsed}, ml: {ml_remaining}, pct: {pct_done}, dose: {self.dose}")

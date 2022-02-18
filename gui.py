@@ -1,3 +1,4 @@
+import os
 import time
 import tkinter as tk
 from tkinter import ttk
@@ -14,7 +15,9 @@ class SodaGui(tk.Tk):
 
         self.title("soda test")
         self.geometry("800x480")
-        #self.attributes('-fullscreen',True)
+        if os.name != 'nt':
+            self.attributes('-fullscreen',True)
+            self.config(cursor="none")
 
         self.main_container = tk.Frame(self, height=430, width=790, bg="blue")
         self.main_container.place(x=5, y=5)
@@ -23,8 +26,6 @@ class SodaGui(tk.Tk):
         self.status_container.place(x=5, y=440)
 
         self.time_widget = TimeWidget(self.status_container)
-
-        self.config(cursor="none")
 
         self.current_main_widget = None
 
