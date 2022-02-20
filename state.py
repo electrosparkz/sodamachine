@@ -33,13 +33,11 @@ class SodaState(object):
         update_thread.start()
 
     def save_state(self):
-        with open(self.file_name, 'w') as fileout:
+        temp_state = {
+            'syrup_remaining': self.syrup_remaining
+        }
 
-            temp_state = {
-                'syrup_remaining': self.syrup_remaining
-            }
-
-            if temp_state != self.last_state:
-                self.last_state = temp_state
-
+        if temp_state != self.last_state:
+            self.last_state = temp_state
+            with open(self.file_name, 'w') as fileout:
                 dump(temp_state, fileout, Dumper=Dumper)

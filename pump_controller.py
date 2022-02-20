@@ -3,13 +3,7 @@ import threading
 import sched, time, signal, sys
 from copy import deepcopy
 
-try:
-    import RPi.GPIO as GPIO
-except ImportError:
-    from unittest.mock import MagicMock
-    GPIO = MagicMock()
-
-GPIO.setmode(GPIO.BCM)
+import gpiozero
 
 
 class PumpController(object):
@@ -22,8 +16,9 @@ class PumpController(object):
         self.latchline = 27
         self.dataline = 22
 
-        self.lockline = 23
-        self.enableline = 5
+        self.clock = None
+        self.latch = None
+        self.data = None
 
         self.bitstate = [0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -33,43 +28,34 @@ class PumpController(object):
 
         self.bitloop()
 
-    def __del__(self):
-        GPIO.output(self.enableline, 1)
-        GPIO.cleanup()
-
     def setup(self):
         print("Setup pins")
-        GPIO.setup((self.clockline, self.latchline, self.dataline, self.lockline, self.enableline), GPIO.OUT)
-        GPIO.output((self.clockline, self.latchline, self.dataline), 0)
-        GPIO.output(self.enableline, 0)  # active low
-
-        for i in range(3):
-            GPIO.output(self.lockline, 0)
-            time.sleep(.3)
-            GPIO.output(self.lockline, 1)
-            time.sleep(.3)
-        GPIO.output(self.lockline, 0)
+        self.clock = gpiozero.DigitalOutputDevice(self.clockline)
+        self.latch = gpiozero.DigitalOutputDevice(self.latchline)
+        self.data = gpiozero.DigitalOutputDevice(self.dataline)
 
     def bitloop(self):
         print("Start loop")
         clock_time = (13000 / 400) / 1000000
 
         def pulsePin(pin, clock_time):
-            GPIO.output(pin, 1)
-            GPIO.output(pin, 0)
+            pin.on()
+            pin.off()
             time.sleep(clock_time)
-
 
         def outputValue(value,data,clock,latch):
             # print(f"Outputting: {value}")
             for bit in reversed(value):
-                GPIO.output(data, 1 if bit == 1 else 0)
+                if bit:
+                    data.on()
+                else:
+                    data.off()
                 pulsePin(clock, clock_time)
             pulsePin(latch, clock_time)
 
 
         def update(obj):
-            outputValue(obj.bitstate, obj.dataline, obj.clockline, obj.latchline)
+            outputValue(obj.bitstate, obj.data, obj.clock, obj.latch)
             if obj.run:
                 obj.scheduler.enter(clock_time, 1, update, (obj,))
 
