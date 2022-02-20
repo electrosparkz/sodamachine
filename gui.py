@@ -78,6 +78,46 @@ class IdleFlavorStatusWidget(tk.Label):
         self.grid(row=self.grid_pos[0], column=self.grid_pos[1], sticky="nsew", padx=5, pady=5)
 
 
+class BottleInserted(tk.Frame):
+    def __init__(self, parent, controller, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+
+        self.parent = parent
+        self.controller = controller
+
+        self.wait_time = 5
+
+        self.config(bg=self.parent.cget('bg'))
+
+        self.inserted_label = tk.Label(self, text=f"Please wait...\nDon't touch bottle", font=font.Font(family="Arial Bold", size=30))
+        self.inserted_label.grid(row=0, column=0, padx=20, pady=20)
+
+        self.wait_time_label = tk.Label(self, text=self.wait_time, font=font.Font(family="Arial Bold", size=50))
+        self.wait_time_label.grid(row=1, column=0, padx=20, pady=20)
+
+        self.place(anchor="c", relx=.5, rely=.5)
+
+    def update_wait_time(self):
+        self.wait_time_label.config(text=self.wait_time)
+        if self.wait_time != 0:
+            self.wait_time -= 1
+            self.after(1000, self.update_wait_time(obj))
+        else:
+            self.display_stats()
+
+    def display_stats(self):
+        self.inserted_label.destroy()
+        self.wait_time_label.destroy()
+
+        fill = self.controller.sensors.bottle_fill
+        size = self.controller.sensors.get_bottle_size()
+
+        self.stats_label = tk.Label(self, text=f"Detected:\n\nSize - {size}\nFill - ~{round(fill)}ml")
+        self.stats_label.place(anchor="c", relx=.5, rely=.5)
+
+        self.after(3000, self.parent.display_flavor_picker)
+
+
 class IdleScreen(tk.Frame):
     def __init__(self, parent, controller, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
