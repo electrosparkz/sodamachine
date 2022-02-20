@@ -50,7 +50,20 @@ class SodaGui(tk.Tk):
         pass
 
     def display_idle_screen(self):
-        pass            
+        if self.current_main_widget:
+            self.current_main_widget.destroy()
+        self.current_main_widget = IdleScreen(self.main_container, self.controller)
+
+
+class IdleScreen(tk.Frame):
+    def __init__(self, parent, controller, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+
+        self.controller = controller
+
+        self.config(bg="yellow")
+
+        self.place(anchor="c", relx=.5, rely=.5, relheight=1, relwidth=1)
 
 
 class FlavorInterface(tk.Frame):
