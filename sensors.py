@@ -40,6 +40,7 @@ class Sensors(object):
 
     def setup_bottle_switch(self):
         bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), args=(self,),  daemon=True)
+        print("Starting detect thread")
         bottle_switch_thread.start()
 
     def _button_thread(self):
@@ -47,6 +48,7 @@ class Sensors(object):
         print(dir(self.bottle_switch))
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state
+        print("Detect thread started, looping")
         while True:
             pass
 
@@ -80,8 +82,7 @@ class Sensors(object):
         val = self.bottle_switch.is_active
         print(f"Pin state changed: {val}")
         if val:
-            time.sleep(2)
-            print(f"Size: {self.get_bottle_size()} - fill: {self.bottle_fill}")
+            self.controller.bottle_inserted()
         self.bottle_present = val
         print(f"Took: {time.time() - start_time}")
 
