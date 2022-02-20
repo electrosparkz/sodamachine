@@ -35,33 +35,33 @@ class Sensors(object):
         GPIO.setup(self.detectpin, GPIO.IN)
         GPIO.add_event_detect(self.detectpin, GPIO.BOTH, callback=self.update_bottle_state)
 
-	def setup_scale(self):
-		if self.scale.begin(self.bus):
-			print("Found scale")
-		self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal']['empty'])
-		self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value']['empty'])
-		time.sleep(1)
-		weight = self.scale.getWeight() * 1000
-		if (weight > 5):
-			print("Scale does not seem empty")
-		else:
-			print(f"Scale is empty: {weight}g")
+    def setup_scale(self):
+        if self.scale.begin(self.bus):
+            print("Found scale")
+        self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal']['empty'])
+        self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value']['empty'])
+        time.sleep(1)
+        weight = self.scale.getWeight() * 1000
+        if (weight > 5):
+            print("Scale does not seem empty")
+        else:
+            print(f"Scale is empty: {weight}g")
 
-	def setup_temp_sensor(self):
-		config = [0x08, 0x00]
-		self.bus.write_i2c_block_data(0x38, 0xE1, config)
-		time.sleep(0.5)
-		byt = self.bus.read_byte(0x38)
-		print(byt)
+    def setup_temp_sensor(self):
+        config = [0x08, 0x00]
+        self.bus.write_i2c_block_data(0x38, 0xE1, config)
+        time.sleep(0.5)
+        byt = self.bus.read_byte(0x38)
+        print(byt)
 
-	def setup_prox_sensor(self):
-		# self.prox_sensor.proximity_gain = 1
-		self.prox_sensor.enable_proximity_sensor()
+    def setup_prox_sensor(self):
+        # self.prox_sensor.proximity_gain = 1
+        self.prox_sensor.enable_proximity_sensor()
 
-	def update_bottle_state(self, channel):
-		val = GPIO.input(self.detectpin)
-		print(f"Pin state changed: {val}")
-		self.bottle_present = val
+    def update_bottle_state(self, channel):
+        val = GPIO.input(self.detectpin)
+        print(f"Pin state changed: {val}")
+        self.bottle_present = val
 
     @property
     def proximity(self):
