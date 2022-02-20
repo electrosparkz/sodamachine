@@ -1,5 +1,7 @@
 import sys
 import signal
+import gpiozero
+
 from gui import SodaGui
 from config import SodaConfig
 from pump_controller import PumpController
@@ -10,8 +12,8 @@ class SodaController(object):
     def __init__(self):
         self.conf = SodaConfig()
         self.state = SodaState()
-        self.sensors = Sensors(self)
-#        self.pc = PumpController(self)
+        self.sensors = Sensors(self, gpiozero)
+        self.pc = PumpController(self, gpiozero)
         self.gui = SodaGui(self)
 
     def bottle_inserted(self):

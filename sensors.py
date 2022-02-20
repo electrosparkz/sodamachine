@@ -2,15 +2,15 @@ import time
 import threading
 
 import smbus2
-import gpiozero
 import PyNAU7802
 
 from apds9930 import APDS9930
 
 
 class Sensors(object):
-    def __init__(self, controller):
+    def __init__(self, controller, gpio):
         self.controller = controller
+        self.gpio = gpio
 
         self.i2c_access_lock = threading.Lock()
 
@@ -32,7 +32,8 @@ class Sensors(object):
 
         self.bottle_switch = None
 
-        self.setup_bottle_switch()
+        # self.setup_bottle_switch()
+        self._button_thread()
 
         self._bottle_size = None
 
@@ -42,7 +43,7 @@ class Sensors(object):
         bottle_switch_thread.start()
 
     def _button_thread(self):
-        self.bottle_switch = gpiozero.Button(self.detectpin, pull_up=False, bounce_time=.5)
+        self.bottle_switch = self.gpio.Button(self.detectpin, pull_up=False, bounce_time=.5)
         print(dir(self.bottle_switch))
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state

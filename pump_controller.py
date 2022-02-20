@@ -3,13 +3,11 @@ import threading
 import sched, time, signal, sys
 from copy import deepcopy
 
-import gpiozero
-
 
 class PumpController(object):
-    def __init__(self, controller):
+    def __init__(self, controller, gpio):
         self.controller = controller
-
+        self.gpio = gpio
         self.scheduler = sched.scheduler(time.time, time.sleep)
 
         self.clockline = 17
@@ -30,9 +28,9 @@ class PumpController(object):
 
     def setup(self):
         print("Setup pins")
-        self.clock = gpiozero.DigitalOutputDevice(self.clockline)
-        self.latch = gpiozero.DigitalOutputDevice(self.latchline)
-        self.data = gpiozero.DigitalOutputDevice(self.dataline)
+        self.clock = self.gpio.DigitalOutputDevice(self.clockline)
+        self.latch = self.gpio.DigitalOutputDevice(self.latchline)
+        self.data = self.gpio.DigitalOutputDevice(self.dataline)
 
     def bitloop(self):
         print("Start loop")
