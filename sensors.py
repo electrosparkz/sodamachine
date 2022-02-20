@@ -45,20 +45,20 @@ class Sensors(object):
 		if (weight > 5):
 			print("Scale does not seem empty")
 		else:
-			print("Scale is empty")
+			print(f"Scale is empty: {weight}g")
 
 	def setup_temp_sensor(self):
 		config = [0x08, 0x00]
 		self.bus.write_i2c_block_data(0x38, 0xE1, config)
 		time.sleep(0.5)
-		byt = bus.read_byte(0x38)
+		byt = self.bus.read_byte(0x38)
 		print(byt)
 
 	def setup_prox_sensor(self):
-		self.prox_sensor.proximity_gain = 1
+		# self.prox_sensor.proximity_gain = 1
 		self.prox_sensor.enable_proximity_sensor()
 
-	def update_bottle_state(self):
+	def update_bottle_state(self, channel):
 		val = GPIO.input(self.detectpin)
 		print(f"Pin state changed: {val}")
 		self.bottle_present = val
@@ -73,9 +73,9 @@ class Sensors(object):
 	def update_temp(self):
 		measure_cmd = [0x33, 0x00]
 		self.i2c_access_lock.acquire()
-		self.bus.write_i2c_block_data(0x38, 0xAC)
+		self.bus.write_i2c_block_data(0x38, 0xAC, measure_cmd)
 		time.sleep(0.5)
-		data = self.bus.read_i2c_block_data(0x38, 0x00)
+		data = self.bus.read_i2c_block_data(0x38,0x00)
 		self.i2c_access_lock.release()
 		temp = ((data[3] & 0x0F) << 16) | (data[4] << 8) | data[5]
 		ctemp = ((temp*200) / 1048576) - 50
