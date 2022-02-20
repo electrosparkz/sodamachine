@@ -34,6 +34,7 @@ class PumpController(object):
         self.bitloop()
 
     def __del__(self):
+        GPIO.output(self.enableline, 1)
         GPIO.cleanup()
 
     def setup(self):
