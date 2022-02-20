@@ -34,8 +34,9 @@ class Sensors(object):
         self.bottle_present = False
 
         self.bottle_switch = gpiozero.Button(self.detectpin, pull_up=False, bounce_time=.5)
-        self.bottle_switch.when_pressed(self.update_bottle_state)
-        self.bottle_switch.when_released(self.update_bottle_state)
+        print(dir(self.bottle_switch))
+        self.bottle_switch.when_activated = self.update_bottle_state
+        self.bottle_switch.when_deactivated = self.update_bottle_state
 
     def setup_scale(self):
         if self.scale.begin(self.bus):
@@ -57,11 +58,12 @@ class Sensors(object):
         print(byt)
 
     def setup_prox_sensor(self):
-        # self.prox_sensor.proximity_gain = 1
         self.prox_sensor.enable_proximity_sensor()
+        self.prox_sensor.proximity_gain = 1 
 
     def update_bottle_state(self, channel):
-        val = self.button_switch.is_pressed()
+        time.sleep(.6)
+        val = self.bottle_switch.is_active
         print(f"Pin state changed: {val}")
         self.bottle_present = val
 
