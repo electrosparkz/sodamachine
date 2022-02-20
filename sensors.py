@@ -2,6 +2,7 @@ import time
 import threading
 
 import smbus2
+import gpiozero
 import PyNAU7802
 import RPi.GPIO as GPIO
 
@@ -32,8 +33,9 @@ class Sensors(object):
 
         self.bottle_present = False
 
-        GPIO.setup(self.detectpin, GPIO.IN)
-        GPIO.add_event_detect(self.detectpin, GPIO.BOTH, callback=self.update_bottle_state)
+        self.bottle_switch = gpiozero.Button(self.detectpin, pull_up=False, bounce_time=.5)
+        self.bottle_switch.when_pressed(self.update_bottle_state)
+        self.bottle_switch.when_released(self.update_bottle_state)
 
     def setup_scale(self):
         if self.scale.begin(self.bus):
@@ -43,9 +45,9 @@ class Sensors(object):
         time.sleep(1)
         weight = self.scale.getWeight() * 1000
         if (weight > 5):
-            print("Scale does not seem empty")
+            print(f"Scale does not seem empty: {weight}g")
         else:
-            print(f"Scale is empty: {weight}g")
+            print("Scale is empty")
 
     def setup_temp_sensor(self):
         config = [0x08, 0x00]
@@ -59,7 +61,7 @@ class Sensors(object):
         self.prox_sensor.enable_proximity_sensor()
 
     def update_bottle_state(self, channel):
-        val = GPIO.input(self.detectpin)
+        val = self.button_switch.is_pressed()
         print(f"Pin state changed: {val}")
         self.bottle_present = val
 
