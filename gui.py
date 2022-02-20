@@ -1,6 +1,7 @@
 import os
 import time
 import tkinter as tk
+import tkinter.font as font
 from tkinter import ttk
 
 from config import SodaConfig
@@ -92,6 +93,10 @@ class IdleScreen(tk.Frame):
             if (grid_y == self.grid_width):
                 grid_x += 1
                 grid_y = 0
+
+        self.insert_bottle_label = tk.Label(self, text="Insert\nbottle", font=font.Font(family="Arial Bold", size=40))
+
+        self.insert_bottle_label.grid(row=0, column=2, columnspan=4, anchor="c")
 
         self.place(anchor="c", relx=.5, rely=.5, relheight=1, relwidth=1)
 
