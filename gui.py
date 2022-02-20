@@ -119,7 +119,7 @@ class BottleInserted(tk.Frame):
         fill = self.controller.sensors.bottle_fill
         size = self.controller.sensors.get_bottle_size()
 
-        self.stats_label = tk.Label(self, text=f"Detected:\n\nSize - {size}\nFill - ~{round(fill)}ml", font=font.Font(family="Arial Bold", size=30))
+        self.stats_label = tk.Label(self, text=f"Detected:\n\n\nSize - {size}\nFill - ~{round(fill)}ml", font=font.Font(family="Arial Bold", size=50))
         self.stats_label.place(anchor="c", relx=.5, rely=.5)
 
         self.after(3000, self.controller.gui.display_flavor_picker)
