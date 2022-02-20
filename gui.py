@@ -99,11 +99,13 @@ class BottleInserted(tk.Frame):
 
         self.place(anchor="c", relx=.5, rely=.5)
 
+        self.update_wait_time()
+
     def update_wait_time(self):
         self.wait_time_label.config(text=self.wait_time)
         if self.wait_time != 0:
             self.wait_time -= 1
-            self.after(1000, self.update_wait_time(obj))
+            self.after(1000, self.update_wait_time)
         else:
             self.display_stats()
 
@@ -117,7 +119,7 @@ class BottleInserted(tk.Frame):
         self.stats_label = tk.Label(self, text=f"Detected:\n\nSize - {size}\nFill - ~{round(fill)}ml")
         self.stats_label.place(anchor="c", relx=.5, rely=.5)
 
-        self.after(3000, self.parent.display_flavor_picker)
+        self.after(3000, self.controller.gui.display_flavor_picker)
 
 
 class IdleScreen(tk.Frame):
