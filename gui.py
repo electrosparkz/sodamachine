@@ -62,10 +62,13 @@ class IdleFlavorStatusWidget(tk.Label):
         self.index = index
         self.grid_pos = grid_pos
 
-        flavor_size = self.controller.config.flavors[index]['size']
-        flavor_name = self.controller.config.flavors[index]['name']
+        flavor_size = self.controller.conf.flavors[index]['size']
+        flavor_name = self.controller.conf.flavors[index]['name']
 
-        percent_remaining = round((self.controller.state.syrup_remaining[index] / (flavor_size * 4546)) * 100)
+        if flavor_size != 0:
+            percent_remaining = round((self.controller.state.syrup_remaining[index] / (flavor_size * 4546)) * 100)
+        else:
+            percent_remaining = 0
 
         super().__init__(self.parent, *args, **kwargs)
 
@@ -78,6 +81,7 @@ class IdleScreen(tk.Frame):
     def __init__(self, parent, controller, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
+        self.parent = parent
         self.controller = controller
 
         self.config(bg=self.parent.cget('bg'))
@@ -93,7 +97,7 @@ class IdleScreen(tk.Frame):
                 grid_x += 1
                 grid_y = 0
 
-        self.place(anchor="c", relx=.5, rely=.5, relheight=1, relwidth=1)
+        self.place(anchor="c", relx=.5, rely=.5)
 
 
 class FlavorInterface(tk.Frame):
