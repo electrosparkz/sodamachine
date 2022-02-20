@@ -65,6 +65,9 @@ class Sensors(object):
         time.sleep(.6)
         val = self.bottle_switch.is_active
         print(f"Pin state changed: {val}")
+        if val:
+            time.sleep(2)
+            print(f"Size: {self.bottle_size} - fill: {self.bottle_fill}")
         self.bottle_present = val
 
     @property
@@ -73,6 +76,30 @@ class Sensors(object):
         prox_val = self.prox_sensor.proximity
         self.i2c_access_lock.release()
         return prox_val
+
+    @property
+    def bottle_fill(self):
+        self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal'][self.bottle_size])
+        self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value'][self.bottle_size])
+
+        weight_values = []
+        for x in range(10):
+            weight_values.append(self.scale.getWeight() * 1000)
+        avg_weight = sum(weight_values)/len(weight_values)
+
+    @property
+    def bottle_size(self):
+        prox_values = []
+        for x in range(20):
+            prox_values.append(self.proximity)
+        avg_prox = sum(prox_values)/len(prox_values)
+
+        if (37 < avg_prox < 42):
+            return "small"
+        elif (50 > avg_prox < 60):
+            return "large"
+        else:
+            return "unknown"
 
     def update_temp(self):
         measure_cmd = [0x33, 0x00]
