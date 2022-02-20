@@ -8,9 +8,9 @@ from sensors import Sensors
 class SodaController(object):
     def __init__(self):
         self.conf = SodaConfig()
-#        self.gui = SodaGui(self)
-        self.pc = PumpController(self)
         self.sensors = Sensors(self)
+        self.pc = PumpController(self)
+        self.gui = SodaGui(self)
 
     def bottle_inserted(self):
         self.gui.display_bottle_inserted()
@@ -31,4 +31,4 @@ class SodaController(object):
 if __name__ == '__main__':
     ctrl = SodaController()
     ctrl.gui.display_idle_screen()
- #   ctrl.run()
+    ctrl.run()

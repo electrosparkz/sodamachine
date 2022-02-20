@@ -26,8 +26,8 @@ class SodaGui(tk.Tk):
         self.status_container = tk.Frame(self, height=35, width=790, bg="green")
         self.status_container.place(x=5, y=440)
 
-        self.time_widget = TimeWidget(self.status_container)
-        self.temp_widget = TempWidget(self.status_container)
+        self.time_widget = TimeWidget(self.status_container, self.controller)
+        self.temp_widget = TempWidget(self.status_container, self.controller)
 
         self.current_main_widget = None
 
@@ -123,10 +123,11 @@ class FlavorPicker(tk.Frame):
 
 
 class TimeWidget(tk.Label):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, controller, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
         self.parent = parent
+        self.controller = controller
 
         self.config(bg=self.parent.cget('bg'))
         self.config(font=("Arial Bold", 18))
@@ -141,10 +142,11 @@ class TimeWidget(tk.Label):
 
 
 class TempWidget(tk.Label):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, controller, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
         self.parent = parent
+        self.controller = controller
 
         self.config(bg=self.parent.cget('bg'))
         self.config(font=("Arial Bold", 18))
@@ -155,8 +157,8 @@ class TempWidget(tk.Label):
         self.tick()
 
     def tick(self):
-        self.sensors.update_temp()
-        self.config(text=f"{round(self.sensors.temp, 2)}°F")
+        self.controller.sensors.update_temp()
+        self.config(text=f"{round(self.controller.sensors.temp, 2)}°F")
         self.after(1000, self.tick)
 
 
