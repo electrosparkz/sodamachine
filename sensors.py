@@ -80,8 +80,7 @@ class Sensors(object):
         val = self.bottle_switch.is_active
         print(f"Pin state changed: {val}")
         if val:
-            time.sleep(2)
-            print(f"Size: {self.get_bottle_size()} - fill: {self.bottle_fill}")
+            self.controller.bottle_inserted()
         self.bottle_present = val
         print(f"Took: {time.time() - start_time}")
 

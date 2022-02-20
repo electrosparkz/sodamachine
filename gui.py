@@ -45,7 +45,9 @@ class SodaGui(tk.Tk):
         self.current_main_widget = FlavorInterface(self.main_container, self.controller, flavor_button) 
 
     def display_bottle_inserted(self):
-        pass
+        if self.current_main_widget:
+            self.current_main_widget.destroy()
+        self.current_main_widget = BottleInserted(self.main_container, self.controller)
 
     def display_goodbye(self):
         pass
