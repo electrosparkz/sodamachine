@@ -38,6 +38,8 @@ class Sensors(object):
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state
 
+        self._bottle_size = None
+
     def setup_scale(self):
         if self.scale.begin(self.bus):
             print("Found scale")
@@ -62,13 +64,15 @@ class Sensors(object):
         self.prox_sensor.proximity_gain = 1 
 
     def update_bottle_state(self, channel):
-        time.sleep(.6)
+        time.sleep(.2)
+        start_time = time.time()
         val = self.bottle_switch.is_active
         print(f"Pin state changed: {val}")
         if val:
             time.sleep(2)
-            print(f"Size: {self.bottle_size} - fill: {self.bottle_fill}")
+            print(f"Size: {self.get_bottle_size()} - fill: {self.bottle_fill}")
         self.bottle_present = val
+        print(f"Took: {time.time() - start_time}")
 
     @property
     def proximity(self):
@@ -79,27 +83,39 @@ class Sensors(object):
 
     @property
     def bottle_fill(self):
-        self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal'][self.bottle_size])
-        self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value'][self.bottle_size])
+        try:
+            bottle_size = self.get_bottle_size(fresh=True)
+            self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal'][bottle_size])
+            self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value'][bottle_size])
+            print(f"Set calibration values for {bottle_size}")
+        except:
+            print("Unknown bottle size")
 
         weight_values = []
         for x in range(10):
             weight_values.append(self.scale.getWeight() * 1000)
         avg_weight = sum(weight_values)/len(weight_values)
+        print(avg_weight)
+        return avg_weight
 
-    @property
-    def bottle_size(self):
-        prox_values = []
-        for x in range(20):
-            prox_values.append(self.proximity)
-        avg_prox = sum(prox_values)/len(prox_values)
+    def get_bottle_size(self, fresh=False):
+        if (not self._bottle_size or fresh):
+            prox_values = []
+            for x in range(20):
+                val = self.proximity
+                prox_values.append(val)
+                print(f"Raw prox value: {val}")
+            avg_prox = sum(prox_values)/len(prox_values)
+            print(f"Average proximity: {avg_prox}")
 
-        if (37 < avg_prox < 42):
-            return "small"
-        elif (50 > avg_prox < 60):
-            return "large"
-        else:
-            return "unknown"
+            if (avg_prox < 45):
+                self._bottle_size = "small"
+            elif (48 < avg_prox):
+                self._bottle_size = "large"
+            else:
+                self._bottle_size = "unknown"
+
+        return self._bottle_size
 
     def update_temp(self):
         measure_cmd = [0x33, 0x00]
