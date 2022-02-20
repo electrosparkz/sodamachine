@@ -32,8 +32,8 @@ class Sensors(object):
 
         self.bottle_switch = None
 
-        # self.setup_bottle_switch()
-        self._button_thread()
+        self.setup_bottle_switch()
+        # self._button_thread()
 
         self._bottle_size = None
 
@@ -47,6 +47,8 @@ class Sensors(object):
         print(dir(self.bottle_switch))
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state
+        while True:
+            pass
 
 
     def setup_scale(self):
