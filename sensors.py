@@ -32,11 +32,13 @@ class Sensors(object):
 
         self.bottle_switch = None
 
+        self.setup_bottle_switch()
+
         self._bottle_size = None
 
 
     def setup_bottle_switch(self):
-        bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), daemon=True)
+        bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), args=(self,),  daemon=True)
         bottle_switch_thread.start()
 
     def _button_thread(self):

@@ -11,7 +11,7 @@ class SodaController(object):
         self.conf = SodaConfig()
         self.state = SodaState()
         self.sensors = Sensors(self)
-        self.pc = PumpController(self)
+#        self.pc = PumpController(self)
         self.gui = SodaGui(self)
 
     def bottle_inserted(self):
