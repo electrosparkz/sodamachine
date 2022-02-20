@@ -4,11 +4,8 @@ import threading
 import smbus2
 import gpiozero
 import PyNAU7802
-import RPi.GPIO as GPIO
 
 from apds9930 import APDS9930
-
-GPIO.setmode(GPIO.BCM)
 
 
 class Sensors(object):
