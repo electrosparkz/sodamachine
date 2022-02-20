@@ -3,13 +3,14 @@ import signal
 from gui import SodaGui
 from config import SodaConfig
 from pump_controller import PumpController
-
+from sensors import Sensors
 
 class SodaController(object):
     def __init__(self):
         self.conf = SodaConfig()
-        self.gui = SodaGui(self)
+#        self.gui = SodaGui(self)
         self.pc = PumpController(self)
+        self.sensors = Sensors(self)
 
     def run(self):
         signal.signal(signal.SIGINT, self.shutdown)
@@ -23,4 +24,4 @@ class SodaController(object):
 if __name__ == '__main__':
     ctrl = SodaController()
     ctrl.gui.display_flavor_picker()
-    ctrl.run()
+ #   ctrl.run()

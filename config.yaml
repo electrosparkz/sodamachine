@@ -1,9 +1,9 @@
 scale_cal:
-  - zero_cal:
+  zero_cal:
     empty: 168412.0
     small: -22228.25
     large: -65327.5
-  - cal_value: # cal at 200ml/g
+  cal_value: # cal at 200ml/g
     empty: -1953372.4489795917
     small: -780586.25
     large: -767725.1243781094
