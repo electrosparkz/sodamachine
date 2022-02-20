@@ -12,6 +12,13 @@ class SodaController(object):
         self.pc = PumpController(self)
         self.sensors = Sensors(self)
 
+    def bottle_inserted(self):
+        self.gui.display_bottle_inserted()
+
+    def bottle_removed(self):
+        self.pc.off(-1)
+        self.gui.display_goodbye()
+
     def run(self):
         signal.signal(signal.SIGINT, self.shutdown)
         self.gui.mainloop()
@@ -23,5 +30,5 @@ class SodaController(object):
 
 if __name__ == '__main__':
     ctrl = SodaController()
-    ctrl.gui.display_flavor_picker()
+    ctrl.gui.display_idle_screen()
  #   ctrl.run()
