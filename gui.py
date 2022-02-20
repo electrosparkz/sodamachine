@@ -27,6 +27,7 @@ class SodaGui(tk.Tk):
         self.status_container.place(x=5, y=440)
 
         self.time_widget = TimeWidget(self.status_container)
+        self.temp_widget = TempWidget(self.status_container)
 
         self.current_main_widget = None
 
@@ -108,7 +109,6 @@ class TimeWidget(tk.Label):
         self.config(bg=self.parent.cget('bg'))
         self.config(font=("Arial Bold", 18))
 
-        # self.grid(row=0, column=0, sticky="w")
         self.place(anchor="w", relx=0, rely=.5)
 
         self.tick()
@@ -116,6 +116,25 @@ class TimeWidget(tk.Label):
     def tick(self):
         self.config(text=time.ctime())
         self.after(300, self.tick)
+
+
+class TempWidget(tk.Label):
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+
+        self.parent = parent
+
+        self.config(bg=self.parent.cget('bg'))
+        self.config(font=("Arial Bold", 18))
+
+        # self.grid(row=0, column=1, sticky="e")
+        self.place(anchor="e", relx=1, rely=.5)
+
+        self.tick()
+
+    def tick(self):
+        self.config(text="34°F")
+        self.after(1000, self.tick)
 
 
 def main():

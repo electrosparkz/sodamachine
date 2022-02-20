@@ -43,6 +43,12 @@ class FlavorButton(tk.Button):
         self.callback(self)
 
 
+class ConfigureButton(tk.Button):
+    def __init__(self, parent, *args, **kwargs):
+        self.parent = parent
+        
+
+
 class FlavorInterfaceButtons(tk.Frame):
     def __init__(self, parent, flavor_name, pump_index, *args, **kwargs):
         self.parent = parent
@@ -182,12 +188,13 @@ class FlavorInterfaceButtons(tk.Frame):
                 self.state = "done"
             else:
                 self.style.configure("LabeledProgressbar",
-                                     text=f"{ml_remaining:.2f}/{self.dose}ml - {time_remaining:.2f}s left",
+                                     text=f"{ml_remaining:.2f}/{self.dose}ml - {time_remaining:.2f}s left - {pct_done}%",
                                      font=self.pbar_font,
                                      background="green")
                 self.progress_bar['value'] = pct_done
                 self.after(100, self._dispense_loop)
         elif self.state == "stop":
+            self.parent.controller.pc.off(self.pump_index)
             self.dispense_button.config(text="HALTED", state="disabled")
             self.style.configure("LabeledProgressbar", background="red")
             self.back_button.configure(state="normal")
