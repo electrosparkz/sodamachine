@@ -30,12 +30,21 @@ class Sensors(object):
 
         self.bottle_present = False
 
+        self.bottle_switch = None
+
+        self._bottle_size = None
+
+
+    def setup_bottle_switch(self):
+        bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), daemon=True)
+        bottle_switch_thread.start()
+
+    def _button_thread(self):
         self.bottle_switch = gpiozero.Button(self.detectpin, pull_up=False, bounce_time=.5)
         print(dir(self.bottle_switch))
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state
 
-        self._bottle_size = None
 
     def setup_scale(self):
         if self.scale.begin(self.bus):
