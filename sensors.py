@@ -92,9 +92,9 @@ class Sensors(object):
             prox_values.append(self.proximity)
         avg_prox = sum(prox_values)/len(prox_values)
 
-        if (37 < avg_prox < 42):
+        if (avg_prox < 45):
             return "small"
-        elif (50 > avg_prox < 60):
+        elif (48 < avg_prox):
             return "large"
         else:
             return "unknown"

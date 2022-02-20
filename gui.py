@@ -41,7 +41,16 @@ class SodaGui(tk.Tk):
     def display_picked_flavor(self, flavor_button):
         if self.current_main_widget:
             self.current_main_widget.destroy()
-        self.current_main_widget = FlavorInterface(self.main_container, self.controller, flavor_button)             
+        self.current_main_widget = FlavorInterface(self.main_container, self.controller, flavor_button) 
+
+    def display_bottle_inserted(self):
+        pass
+
+    def display_goodbye(self):
+        pass
+
+    def display_idle_screen(self):
+        pass            
 
 
 class FlavorInterface(tk.Frame):
@@ -133,7 +142,8 @@ class TempWidget(tk.Label):
         self.tick()
 
     def tick(self):
-        self.config(text="34°F")
+        self.sensors.update_temp()
+        self.config(text=f"{round(self.sensors.temp, 2)}°F")
         self.after(1000, self.tick)
 
 
