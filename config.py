@@ -14,11 +14,13 @@ class SodaConfig(object):
             self.raw_config = load(filehandle, Loader=Loader)
 
         self.flavors = self.raw_config['flavors']
-        self.cal_values = self.raw_config['calibration']
+        self.cal_values = self.raw_config['syrup_cal']
+        self.scale_cal_values = self.raw_config['scale_cal']
 
     def save_config(self):
         with open(self.file_name, 'w') as fileout:
             self.raw_config['flavors'] = self.flavors
-            self.raw_config['calibration'] = self.calibration
+            self.raw_config['syrup_cal'] = self.cal_values
+            self.raw_config['scale_cal'] = self.scale_cal_values
 
             dump(self.raw_config, fileout, Dumper=Dumper)
