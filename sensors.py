@@ -96,7 +96,7 @@ class Sensors(object):
     @property
     def bottle_fill(self):
         try:
-            bottle_size = self.get_bottle_size(fresh=True)
+            bottle_size = self.get_bottle_size()
             self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal'][bottle_size])
             self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value'][bottle_size])
             print(f"Set calibration values for {bottle_size}")
@@ -113,7 +113,7 @@ class Sensors(object):
     def get_bottle_size(self, fresh=False):
         if (not self._bottle_size or fresh):
             prox_values = []
-            for x in range(20):
+            for x in range(100):
                 val = self.proximity
                 prox_values.append(val)
                 print(f"Raw prox value: {val}")
