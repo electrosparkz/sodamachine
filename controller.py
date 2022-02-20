@@ -4,10 +4,12 @@ from gui import SodaGui
 from config import SodaConfig
 from pump_controller import PumpController
 from sensors import Sensors
+from state import SodaState
 
 class SodaController(object):
     def __init__(self):
         self.conf = SodaConfig()
+        self.state = SodaState()
         self.sensors = Sensors(self)
         self.pc = PumpController(self)
         self.gui = SodaGui(self)
