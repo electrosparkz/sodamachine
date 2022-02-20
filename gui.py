@@ -98,9 +98,9 @@ class IdleScreen(tk.Frame):
                 grid_x += 1
                 grid_y = 0
 
-        self.insert_bottle_label = tk.Label(self, text="Insert\nbottle", font=font.Font(family="Arial Bold", size=40))
+        self.insert_bottle_label = tk.Label(self, text="Insert\nbottle", font=font.Font(family="Arial Bold", size=50))
 
-        self.insert_bottle_label.grid(row=0, column=2, columnspan=4, anchor="c")
+        self.insert_bottle_label.grid(row=0, column=2, columnspan=4, rowspan=4, padx=50, pady=50)
 
         self.place(anchor="c", relx=.5, rely=.5)
 
