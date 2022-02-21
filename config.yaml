@@ -1,12 +1,12 @@
 scale_cal:
   zero_cal:
-    empty: 158372.1
-    small: 16595.45
-    large: -53954.925
+    empty: -591103.9125
+    small: -637471.2375
+    large: -678571.225
   cal_value: # cal at 200ml/g
-    empty: -1068644.3910256408
-    small: -829068.15920398
-    large: -704821.375
+    empty: -542639.8323615161
+    small: -530843.7817258883
+    large: -342012.1173469388
 syrup_cal: # ml/s
 - 0.982
 - 0.827
