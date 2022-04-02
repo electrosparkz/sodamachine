@@ -16,7 +16,7 @@ else:
 input("Press enter to start zero offset average no bottle")
 empty_values = []
 
-for i in range(10):
+for i in range(20):
     scale.calculateZeroOffset()
     offset = scale.getZeroOffset()
     empty_values.append(offset)
@@ -31,7 +31,7 @@ known_mass = float(input("Add known mass: "))
 
 empty_cals = []
 
-for i in range(10):
+for i in range(20):
     scale.calculateCalibrationFactor(known_mass)
     cal = scale.getCalibrationFactor()
     empty_cals.append(cal)
@@ -43,7 +43,7 @@ print(f"Averaged cal no bottle: {sum(empty_cals)/len(empty_cals)}")
 input("Place empty small bottle and press enter to start")
 small_values = []
 
-for i in range(10):
+for i in range(20):
     scale.calculateZeroOffset()
     offset = scale.getZeroOffset()
     small_values.append(offset)
@@ -58,7 +58,7 @@ known_mass = float(input("Add known mass: "))
 
 small_cals = []
 
-for i in range(10):
+for i in range(20):
     scale.calculateCalibrationFactor(known_mass)
     cal = scale.getCalibrationFactor()
     small_cals.append(cal)
@@ -70,7 +70,7 @@ print(f"Averaged cal small bottle: {sum(small_cals)/len(small_cals)}")
 input("Place empty large bottle and press enter to start")
 large_values = []
 
-for i in range(10):
+for i in range(20):
     scale.calculateZeroOffset()
     offset = scale.getZeroOffset()
     large_values.append(offset)
@@ -85,10 +85,10 @@ known_mass = float(input("Add known mass: "))
 
 large_cals = []
 
-for i in range(10):
+for i in range(20):
     scale.calculateCalibrationFactor(known_mass)
     cal = scale.getCalibrationFactor()
-    small_cals.append(cal)
+    large_cals.append(cal)
     print(f"Last cal: {cal}")
     time.sleep(.5)
 

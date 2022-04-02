@@ -1,3 +1,4 @@
+import os
 import sys
 import signal
 import gpiozero
@@ -33,6 +34,7 @@ class SodaController(object):
 
 
 if __name__ == '__main__':
+    os.environ['DISPLAY'] = ":0.0"
     ctrl = SodaController()
     ctrl.gui.display_idle_screen()
     ctrl.run()

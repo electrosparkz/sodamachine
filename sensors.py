@@ -120,7 +120,7 @@ class Sensors(object):
             avg_prox = sum(prox_values)/len(prox_values)
             print(f"Average proximity: {avg_prox}")
 
-            if (avg_prox < 45):
+            if (avg_prox < 47):
                 self._bottle_size = "small"
             elif (48 < avg_prox):
                 self._bottle_size = "large"
