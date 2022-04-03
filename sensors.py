@@ -82,6 +82,8 @@ class Sensors(object):
         print(f"Pin state changed: {val}")
         if val:
             self.controller.bottle_inserted()
+        else:
+            self.controller.bottle_removed()
         self.bottle_present = val
         print(f"Took: {time.time() - start_time}")
 
