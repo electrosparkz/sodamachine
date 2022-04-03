@@ -51,7 +51,7 @@ class SodaGui(tk.Tk):
         self.current_main_widget = BottleInserted(self.main_container, self.controller)
 
     def display_goodbye(self):
-        pass
+        self.display_idle_screen()
 
     def display_idle_screen(self):
         if self.current_main_widget:
