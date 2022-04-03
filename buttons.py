@@ -59,7 +59,7 @@ class FlavorInterfaceButtons(tk.Frame):
         self.dose = 100
         self.increment = 5
 
-        self.ml_per_sec = self.parent.controller.conf.cal_values[self.pump_index]
+        self.steps_per_ml = self.parent.controller.conf.cal_values[self.pump_index]
 
         self.state = "idle"  # idle, dispense, done, stop
 
@@ -167,24 +167,23 @@ class FlavorInterfaceButtons(tk.Frame):
 
     def start_dispense(self):
 
-        self.pump_runtime = self.dose / self.ml_per_sec
-
-        self.parent.controller.pc.on(self.pump_index)
+        self.parent.controller.pc.pump_start(self.pump_index, self.steps_per_ml, self.dose)
         self.dispense_started = round(time.time(), 2)
         self._dispense_loop()
 
     def _dispense_loop(self):
         if self.state == "dispense":
-            time_remaining = round(self.pump_runtime - (time.time() - self.dispense_started), 2)
+            # time_remaining = round(self.pump_runtime - (time.time() - self.dispense_started), 2)
             time_elapsed = round(time.time() - self.dispense_started, 2)
-            ml_remaining = round((time_remaining * self.ml_per_sec), 2)
+
+            pump_status, ml_dispensed = self.parent.controller.pc.status
+
+            ml_remaining = self.dose - ml_dispensed
             pct_done = 100 - round((ml_remaining / self.dose) * 100)
 
-            print(f"Remain: {time_remaining}/{time_elapsed}, ml: {ml_remaining}, pct: {pct_done}, dose: {self.dose}")
+            print(f"Remain: {time_elapsed}, ml: {ml_remaining}, pct: {pct_done}, dose: {self.dose}")
 
-            if ml_remaining <= 0:
-                time_remaining = 0
-                ml_remaining = 0
+            if pump_status == 0x00:
                 self.state = "done"
             else:
                 self.style.configure("LabeledProgressbar",
@@ -192,9 +191,9 @@ class FlavorInterfaceButtons(tk.Frame):
                                      font=self.pbar_font,
                                      background="green")
                 self.progress_bar['value'] = pct_done
-                self.after(100, self._dispense_loop)
+                self.after(2000, self._dispense_loop)
         elif self.state == "stop":
-            self.parent.controller.pc.off(self.pump_index)
+            self.parent.controller.pc.pump_stop(self.pump_index)
             self.dispense_button.config(text="HALTED", state="disabled")
             self.style.configure("LabeledProgressbar", background="red")
             self.back_button.configure(state="normal")
@@ -204,5 +203,5 @@ class FlavorInterfaceButtons(tk.Frame):
             self.style.configure("LabeledProgressbar", text="Done!", font=self.pbar_font)
             self.progress_bar['value'] = 100
             self.back_button.configure(state="normal")
-            self.parent.controller.pc.off(self.pump_index)  
+            self.parent.controller.pc.pump_stop(self.pump_index)  
 

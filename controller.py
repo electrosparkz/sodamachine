@@ -1,6 +1,8 @@
 import os
 import sys
 import signal
+import smbus2
+import threading
 import gpiozero
 
 from gui import SodaGui
@@ -11,10 +13,14 @@ from state import SodaState
 
 class SodaController(object):
     def __init__(self):
+
+        self.bus = smbus2.SMBus(1)
+        self.i2c_lock = threading.Lock()
+
         self.conf = SodaConfig()
         self.state = SodaState()
-        self.sensors = Sensors(self, gpiozero)
-        self.pc = PumpController(self, gpiozero)
+        self.sensors = Sensors(self, gpiozero, self.bus)
+        self.pc = PumpController(self, self.bus)
         self.gui = SodaGui(self)
 
     def bottle_inserted(self):
