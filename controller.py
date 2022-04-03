@@ -35,7 +35,7 @@ class SodaController(object):
         self.gui.mainloop()
 
     def shutdown(self, signal, frame):
-        self.pc.off(-1)
+        self.pc.pump_stop(0)
         sys.exit(0)
 
 

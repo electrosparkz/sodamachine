@@ -28,7 +28,7 @@ class PumpController(object):
     def pump_stop(self, channel):
         command = []
         command.append(channel)
-        command.append([0x00] * 5)
+        command.extend([0x00] * 5)
         with self.controller.i2c_lock:
             self.bus.write_i2c_block_data(self.pump_address, 0, command)
 

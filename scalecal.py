@@ -1,3 +1,4 @@
+import sys
 import time
 import PyNAU7802
 import smbus2
@@ -39,6 +40,8 @@ for i in range(20):
     time.sleep(.5)
 
 print(f"Averaged cal no bottle: {sum(empty_cals)/len(empty_cals)}")
+
+sys.exit(0)
 
 input("Place empty small bottle and press enter to start")
 small_values = []
