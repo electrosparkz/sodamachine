@@ -27,7 +27,7 @@ class SodaController(object):
         self.gui.display_bottle_inserted()
 
     def bottle_removed(self):
-        self.pc.off(-1)
+        self.pc.pump_stop(0)
         self.gui.display_goodbye()
 
     def run(self):

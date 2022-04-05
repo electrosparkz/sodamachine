@@ -210,5 +210,5 @@ class FlavorInterfaceButtons(tk.Frame):
 
     def _update_syrup_remaining(self):
         _, ml_dispensed = self.parent.controller.pc.status
-        syrup_remain = self.controller.state.syrup_remaining[self.pump_index]
-        self.controller.state.syrup_remaining[self.pump_index] = syrup_remain - ml_dispensed
+        syrup_remain = self.parent.controller.state.syrup_remaining[self.pump_index]
+        self.parent.controller.state.syrup_remaining[self.pump_index] = syrup_remain - ml_dispensed

@@ -23,13 +23,16 @@ class SodaState(object):
 
         self.last_state = None
 
+        self._start_periodic_save()
+
     def _start_periodic_save(self, interval=5):
         def update(obj):
+            print("In update")
             obj.save_state()
             obj.scheduler.enter(interval, interval + 30, update, (obj,))
 
         update(self)
-        update_thread = threading.Thread(target=lambda x: x._start_periodic_save(), args=(self.scheduler,), daemon=True)
+        update_thread = threading.Thread(target=lambda x: x.run(), args=(self.scheduler,), daemon=True)
         update_thread.start()
 
     def save_state(self):
