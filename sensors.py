@@ -35,6 +35,13 @@ class Sensors(object):
 
         self._bottle_size = None
 
+        self.weight_print_thread = threading.Thread(target=self._print_weight_thread, daemon=True)
+        self.weight_print_thread.start()
+
+    def _print_weight_thread(self):
+        while True:
+            print(f"Weight: {self.scale.getWeight()}g")
+            time.sleep(1)
 
     def setup_bottle_switch(self):
         bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), args=(self,),  daemon=True)

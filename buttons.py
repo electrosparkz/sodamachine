@@ -66,7 +66,7 @@ class FlavorInterfaceButtons(tk.Frame):
         if bottle_size not in ["large", "small"]:
             self.dose = 100
         else:
-            self.dose = self.parent.controller.conf.flavors['pour'][bottle_size]
+            self.dose = self.parent.controller.conf.flavors[self.pump_index]['pour'][bottle_size]
         self.increment = 10
 
         self.steps_per_ml = self.parent.controller.conf.cal_values[self.pump_index]
