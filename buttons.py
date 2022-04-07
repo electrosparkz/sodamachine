@@ -33,7 +33,7 @@ class FlavorButton(tk.Button):
 
         self.grid(row=0, column=0, sticky="nsew", padx=3, pady=3)
 
-        self.status_label.config(text=f"{self.flavor_size}g - Remain: {round((self.controller.state.syrup_remaining[self.pump_index] / (flavor_size * 4546)) * 100)}%")
+        self.status_label.config(text=f"{self.flavor_size}g - Remain: {round((self.parent.controller.state.syrup_remaining[self.pump_index] / (self.flavor_size * 4546)) * 100)}%")
 
         self.status_label.grid(row=1, column=0, sticky="nsew", padx=3, pady=3)
 
@@ -215,5 +215,6 @@ class FlavorInterfaceButtons(tk.Frame):
 
     def _update_syrup_remaining(self):
         _, ml_dispensed = self.parent.controller.pc.status
+        print(f"Update syrup: {ml_dispensed}")
         syrup_remain = self.parent.controller.state.syrup_remaining[self.pump_index]
         self.parent.controller.state.syrup_remaining[self.pump_index] = syrup_remain - ml_dispensed
