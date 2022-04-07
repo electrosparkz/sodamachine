@@ -35,7 +35,8 @@ class SodaGui(tk.Tk):
 
         # self.display_flavor_picker()
 
-    def display_flavor_picker(self):
+    def display_flavor_picker(self, widget):
+        widget.destroy()
         if self.current_main_widget:
             self.current_main_widget.destroy()
         self.current_main_widget = FlavorPicker(self.main_container, self.controller)
@@ -122,7 +123,7 @@ class BottleInserted(tk.Frame):
         self.stats_label = tk.Label(self.parent, text=f"Detected:\n\n\nSize - {size}\nFill - ~{round(fill)}ml", font=font.Font(family="Arial Bold", size=30), bg="yellow")
         self.stats_label.place(anchor="c", relx=.5, rely=.5, relheight=1, relwidth=1)
 
-        self.after(3000, self.controller.gui.display_flavor_picker)
+        self.after(3000, self.controller.gui.display_flavor_picker, self)
 
 
 class IdleScreen(tk.Frame):
