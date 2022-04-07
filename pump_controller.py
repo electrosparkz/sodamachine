@@ -9,6 +9,8 @@ class PumpController(object):
 
         self.pump_address = 8
 
+        self.last_dispense = 0
+
     def pump_start(self, channel, direction, steps, ml):
         command = []
         command.append(channel)
@@ -36,7 +38,10 @@ class PumpController(object):
     def status(self):
         with self.controller.i2c_lock:
             status = self.bus.read_i2c_block_data(self.pump_address, 0, 3)
-            return status[0], int.from_bytes(bytes(status[1:]), "big")
+            dispensed = int.from_bytes(bytes(status[1:]), "big")
+            if dispensed != 0:
+                self.last_dispense = dispensed
+            return status[0], self.last_dispense
 
 
 # class PumpController(object):
