@@ -70,7 +70,7 @@ class IdleFlavorStatusWidget(tk.Label):
         flavor_name = self.controller.conf.flavors[index]['name']
 
         if flavor_size != 0:
-            percent_remaining = round((self.controller.state.syrup_remaining[index] / (flavor_size * 4546)) * 100)
+            percent_remaining = round((self.controller.state.syrup_remaining[self.index] / (flavor_size * 4546)) * 100)
         else:
             percent_remaining = 0
 
@@ -88,7 +88,7 @@ class BottleInserted(tk.Frame):
         self.parent = parent
         self.controller = controller
 
-        self.wait_time = 5
+        self.wait_time = 3
 
         self.config(bg=self.parent.cget('bg'))
 

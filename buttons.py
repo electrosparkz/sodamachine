@@ -33,7 +33,7 @@ class FlavorButton(tk.Button):
 
         self.grid(row=0, column=0, sticky="nsew", padx=3, pady=3)
 
-        self.status_label.config(text=f"{self.flavor_size}g - Remain: 100%")
+        self.status_label.config(text=f"{self.flavor_size}g - Remain: {round((self.controller.state.syrup_remaining[self.pump_index] / (flavor_size * 4546)) * 100)}%")
 
         self.status_label.grid(row=1, column=0, sticky="nsew", padx=3, pady=3)
 
@@ -56,8 +56,13 @@ class FlavorInterfaceButtons(tk.Frame):
 
         self.flavor_name = flavor_name
 
-        self.dose = 100
-        self.increment = 5
+        bottle_size = self.parent.controller.sensors.get_bottle_size
+
+        if bottle_size not in ["large", "small"]:
+            self.dose = 100
+        else:
+            self.dose = self.parent.controller.conf.flavors['pour'][bottle_size]
+        self.increment = 10
 
         self.steps_per_ml = self.parent.controller.conf.cal_values[self.pump_index]
 

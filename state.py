@@ -27,7 +27,6 @@ class SodaState(object):
 
     def _start_periodic_save(self, interval=5):
         def update(obj):
-            print("In update")
             obj.save_state()
             obj.scheduler.enter(interval, interval + 30, update, (obj,))
 
@@ -39,6 +38,7 @@ class SodaState(object):
         temp_state = {
             'syrup_remaining': self.syrup_remaining
         }
+        print("State saved")
 
         if temp_state != self.last_state:
             self.last_state = temp_state
