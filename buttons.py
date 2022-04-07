@@ -33,7 +33,12 @@ class FlavorButton(tk.Button):
 
         self.grid(row=0, column=0, sticky="nsew", padx=3, pady=3)
 
-        self.status_label.config(text=f"{self.flavor_size}g - Remain: {round((self.parent.controller.state.syrup_remaining[self.pump_index] / (self.flavor_size * 4546)) * 100)}%")
+        try:
+            remaining_pct = round((self.parent.controller.state.syrup_remaining[self.pump_index] / (self.flavor_size * 4546)) * 100)
+        except:
+            remaining_pct = 0
+
+        self.status_label.config(text=f"{self.flavor_size}g - Remain: {remaining_pct}%")
 
         self.status_label.grid(row=1, column=0, sticky="nsew", padx=3, pady=3)
 
