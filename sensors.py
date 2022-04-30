@@ -35,8 +35,8 @@ class Sensors(object):
 
         self._bottle_size = None
 
-        self.weight_print_thread = threading.Thread(target=self._print_weight_thread, daemon=True)
-        self.weight_print_thread.start()
+        # self.weight_print_thread = threading.Thread(target=self._print_weight_thread, daemon=True)
+        # self.weight_print_thread.start()
 
     def _print_weight_thread(self):
         while True:
@@ -102,20 +102,21 @@ class Sensors(object):
 
     @property
     def bottle_fill(self):
-        try:
-            bottle_size = self.get_bottle_size()
-            self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal'][bottle_size])
-            self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value'][bottle_size])
-            print(f"Set calibration values for {bottle_size}")
-        except:
-            print("Unknown bottle size")
+    #    try:
+    #        bottle_size = self.get_bottle_size()
+    #        self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal'][bottle_size])
+    #        self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value'][bottle_size])
+    #        print(f"Set calibration values for {bottle_size}")
+    #    except:
+    #        print("Unknown bottle size")
 
-        weight_values = []
-        for x in range(10):
-            weight_values.append(self.scale.getWeight() * 1000)
-        avg_weight = sum(weight_values)/len(weight_values)
-        print(avg_weight)
-        return avg_weight
+    #    weight_values = []
+    #    for x in range(10):
+    #        weight_values.append(self.scale.getWeight() * 1000)
+    #    avg_weight = sum(weight_values)/len(weight_values)
+    #    print(avg_weight)
+    #    return avg_weight
+        return 0
 
     def get_bottle_size(self, fresh=False):
         if (not self._bottle_size or fresh):

@@ -8,9 +8,9 @@ scale_cal:
     small: -919990.916998012
     large: -919990.916998012
 syrup_cal: # ml/s
-- 420
-- 420
-- 420
+- 840
+- 1060
+- 840
 - 400
 - 400
 - 400
@@ -21,19 +21,19 @@ flavors:
   name: Coke
   size: 5
   pour:
-    - large: 210
+    - large: 160
     - small: 90
 - icon: barqs.png
   name: Barqs
   size: 2.5
   pour:
-    - large: 210
+    - large: 160
     - small: 90
 - icon: mello.png
   name: Mello Yellow
   size: 2.5
   pour:
-    - large: 210
+    - large: 160
     - small: 90
 - icon: nc.png
   name: NC
