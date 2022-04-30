@@ -133,7 +133,7 @@ class Sensors(object):
             elif (48 < avg_prox):
                 self._bottle_size = "large"
             else:
-                self._bottle_size = "unknown"
+                self._bottle_size = "small"
 
         return self._bottle_size
 
