@@ -188,6 +188,8 @@ class FlavorInterfaceButtons(tk.Frame):
 
             pump_status, ml_dispensed = self.parent.controller.pc.status
 
+            self._update_syrup_remaining(ml_dispensed)
+
             ml_remaining = self.dose - ml_dispensed
             pct_done = 100 - round((ml_remaining / self.dose) * 100)
 
@@ -207,7 +209,6 @@ class FlavorInterfaceButtons(tk.Frame):
             self.dispense_button.config(text="HALTED", state="disabled")
             self.style.configure("LabeledProgressbar", background="red")
             self.back_button.configure(state="normal")
-            self._update_syrup_remaining()
         
         if self.state == "done":
             self.dispense_button.config(text="Done!", state="disabled", bg="green", activebackground="green")
@@ -215,11 +216,8 @@ class FlavorInterfaceButtons(tk.Frame):
             self.progress_bar['value'] = 100
             self.back_button.configure(state="normal")
             self.parent.controller.pc.pump_stop(self.pump_index)
-            self._update_syrup_remaining()
 
-
-    def _update_syrup_remaining(self):
-        _, ml_dispensed = self.parent.controller.pc.status
+    def _update_syrup_remaining(self, ml_disepnsed):
         print(f"Update syrup: {ml_dispensed}")
         syrup_remain = self.parent.controller.state.syrup_remaining[self.pump_index]
         self.parent.controller.state.syrup_remaining[self.pump_index] = syrup_remain - ml_dispensed
