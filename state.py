@@ -38,9 +38,9 @@ class SodaState(object):
         temp_state = {
             'syrup_remaining': self.syrup_remaining
         }
-        print("State saved")
-        print(temp_state)
-        print(self.syrup_remaining)
+        #print("State saved")
+        #print(temp_state)
+        #print(self.syrup_remaining)
 
         if temp_state != self.last_state:
             self.last_state = temp_state
