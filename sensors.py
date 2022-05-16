@@ -44,7 +44,7 @@ class Sensors(object):
     #         time.sleep(1)
 
     def setup_bottle_switch(self):
-        bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), args=(self,),  daemon=True)
+        bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), args=(self,))  #,  daemon=True)
         print("Starting detect thread")
         bottle_switch_thread.start()
 
@@ -55,7 +55,8 @@ class Sensors(object):
         self.bottle_switch.when_deactivated = self.update_bottle_state
         print("Detect thread started, looping")
         while True:
-            time.sleep(5)
+            self.bottle_switch.wait_for_press()
+            print("Button'd")
 
     # def setup_scale(self):
     #     with self.controller.i2c_lock:
