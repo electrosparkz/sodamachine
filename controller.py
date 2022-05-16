@@ -23,6 +23,8 @@ class SodaController(object):
         self.pc = PumpController(self, self.bus)
         self.gui = SodaGui(self)
 
+        self.bottle_size = None
+
     def bottle_inserted(self):
         self.gui.display_bottle_inserted()
 

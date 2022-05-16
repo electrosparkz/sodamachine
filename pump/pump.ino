@@ -15,7 +15,7 @@ AccelStepper stepper(AccelStepper::DRIVER, 3, 2); // Defaults to AccelStepper::F
 int channels[8] = {4, 5, 6, 7, 8, 9, 10, 11};
 
 int steps_per_rev = 400;
-float revs = 5;
+float revs = 4.2;
 
 int currentChannel = 255;
 byte currentDir = 0x00;

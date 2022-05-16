@@ -89,41 +89,36 @@ class BottleInserted(tk.Frame):
         self.parent = parent
         self.controller = controller
 
-        self.wait_time = 3
-
         self.config(bg=self.parent.cget('bg'))
+        self.button_font = font.Font(family="Arial Bold", size=20)
 
-        self.inserted_label = tk.Label(self, text=f"Please wait...\nDon't touch bottle", font=font.Font(family="Arial Bold", size=30))
-        self.inserted_label.grid(row=0, column=0, padx=20, pady=20)
+        self.small_button = tk.Button(self,
+                                      text=f"Small bottle", 
+                                      command=lambda: self.set_size("small"),
+                                      bg="green",
+                                      activebackground="green",
+                                      font=self.button_font,
+                                      width=1,
+                                      height=1)
 
-        self.wait_time_label = tk.Label(self, text=self.wait_time, font=font.Font(family="Arial Bold", size=50))
-        self.wait_time_label.grid(row=1, column=0, padx=20, pady=20)
+        self.small_button.grid(column=0, row=0, columnspan=3, rowspan=3, sticky="nsew", padx=10, pady=10)
+
+        self.big_button = tk.Button(self,
+                                    text=f"Big bottle", 
+                                    command=lambda: self.set_size("big"),
+                                    bg="red",
+                                    activebackground="red",
+                                    font=self.button_font,
+                                    width=1,
+                                    height=1)
+
+        self.big_button.grid(column=2, row=0, columnspan=3, rowspan=3, sticky="nsew", padx=10, pady=10)
 
         self.place(anchor="c", relx=.5, rely=.5)
 
-        threading.Thread(target=self.controller.sensors.get_bottle_size, args=(True,)).start()
-
-        self.update_wait_time()
-
-    def update_wait_time(self):
-        self.wait_time_label.config(text=self.wait_time)
-        if self.wait_time != 0:
-            self.wait_time -= 1
-            self.after(1000, self.update_wait_time)
-        else:
-            self.display_stats()
-
-    def display_stats(self):
-        self.inserted_label.destroy()
-        self.wait_time_label.destroy()
-
-        fill = self.controller.sensors.bottle_fill
-        size = self.controller.sensors.get_bottle_size()
-
-        self.stats_label = tk.Label(self.parent, text=f"Detected:\n\n\nSize - {size}\nFill - ~{round(fill)}ml", font=font.Font(family="Arial Bold", size=30), bg="blue")
-        self.stats_label.place(anchor="c", relx=.5, rely=.5, relheight=1, relwidth=1)
-
-        self.after(3000, self.controller.gui.display_flavor_picker, self)
+    def set_size(self, size):
+        self.controller.bottle_size = size
+        self.controller.gui.display_flavor_picker(self)
 
 
 class IdleScreen(tk.Frame):

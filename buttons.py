@@ -61,13 +61,14 @@ class FlavorInterfaceButtons(tk.Frame):
 
         self.flavor_name = flavor_name
 
-        bottle_size = self.parent.controller.sensors.get_bottle_size()
+        bottle_size = self.parent.controller.bottle_size
 
         if bottle_size not in ["large", "small"]:
             self.dose = 50
         else:
             self.dose = self.parent.controller.conf.flavors[self.pump_index]['pour'][bottle_size]
-        self.increment = 10
+
+        self.init_dose = int(self.dose)
 
         self.steps_per_ml = self.parent.controller.conf.cal_values[self.pump_index]
 
@@ -108,18 +109,30 @@ class FlavorInterfaceButtons(tk.Frame):
 
         self.dispense_button.grid(column=0, row=0, columnspan=3, rowspan=3, sticky="nsew", padx=10, pady=10)
 
-        self.up_button = tk.Button(self,
-                                   text=f"+{self.increment}ml",
-                                   command=self.add_inc,
-                                   bg="green",
-                                   activebackground="green",
-                                   font=self.button_font)
-        self.down_button = tk.Button(self,
-                                     text=f"-{self.increment}ml",
-                                     command=self.remove_inc,
-                                     bg="red",
-                                     activebackground="red",
+        self.up_button_5 = tk.Button(self,
+                                     text=f"+5ml",
+                                     command=lambda: self.add_inc(5),
+                                     bg="green",
+                                     activebackground="green",
                                      font=self.button_font)
+        self.up_button_10 = tk.Button(self,
+                                      text=f"+10ml",
+                                      command=lambda: self.add_inc(10),
+                                      bg="green",
+                                      activebackground="green",
+                                      font=self.button_font)
+        self.down_button_5 = tk.Button(self,
+                                       text=f"-5ml",
+                                       command=lambda: self.remove_inc(5),
+                                       bg="red",
+                                       activebackground="red",
+                                       font=self.button_font)
+        self.down_button_10 = tk.Button(self,
+                                        text=f"-10ml",
+                                        command=lambda: self.remove_inc(10),
+                                        bg="red",
+                                        activebackground="red",
+                                        font=self.button_font)
         self.reset_button = tk.Button(self,
                                       text="RESET",
                                       command=self.reset_value,
@@ -127,8 +140,12 @@ class FlavorInterfaceButtons(tk.Frame):
                                       activebackground="yellow",
                                       font=self.button_font)
 
-        self.up_button.grid(row=0, column=3, sticky="nsew", padx=10, pady=10)
-        self.down_button.grid(row=2, column=3, sticky="nsew", padx=10, pady=10)
+        self.up_button_5.grid(row=0, column=3, sticky="nsew", padx=10, pady=10)
+        self.up_button_10.grid(row=0, column=4, sticky="nsew", padx=10, pady=10)
+
+        self.down_button_5.grid(row=2, column=3, sticky="nsew", padx=10, pady=10)
+        self.down_button_10.grid(row=2, column=4, sticky="nsew", padx=10, pady=10)
+
         self.reset_button.grid(row=1, column=3, sticky="nsew", padx=10, pady=10)
 
         self.style = ttk.Style(self)
@@ -153,16 +170,16 @@ class FlavorInterfaceButtons(tk.Frame):
     def _update_button_text(self):
         self.dispense_button.config(text=f"Dispense\n\nDispense amount:\n{self.dose}ml")
 
-    def add_inc(self):
-        self.dose += self.increment
+    def add_inc(self, val):
+        self.dose += val
         self._update_button_text()
 
-    def remove_inc(self):
-        self.dose -= self.increment
+    def remove_inc(self, val):
+        self.dose -= val
         self._update_button_text()
 
     def reset_value(self):
-        self.dose = 100
+        self.dose = self.init_dose
         self._update_button_text()
 
     def dispense_pushed(self):
@@ -186,9 +203,9 @@ class FlavorInterfaceButtons(tk.Frame):
             # time_remaining = round(self.pump_runtime - (time.time() - self.dispense_started), 2)
             time_elapsed = round(time.time() - self.dispense_started, 2)
 
-            pump_status, ml_dispensed = self.parent.controller.pc.status
+            pump_status, ml_dispensed, last_diff = self.parent.controller.pc.status
 
-            self._update_syrup_remaining(ml_dispensed)
+            self._update_syrup_remaining(last_diff)
 
             ml_remaining = self.dose - ml_dispensed
             pct_done = 100 - round((ml_remaining / self.dose) * 100)
@@ -203,7 +220,7 @@ class FlavorInterfaceButtons(tk.Frame):
                                      font=self.pbar_font,
                                      background="green")
                 self.progress_bar['value'] = pct_done
-                self.after(500, self._dispense_loop)
+                self.after(300, self._dispense_loop)
         elif self.state == "stop":
             self.parent.controller.pc.pump_stop(self.pump_index)
             self.dispense_button.config(text="HALTED", state="disabled")

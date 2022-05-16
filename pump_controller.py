@@ -9,7 +9,11 @@ class PumpController(object):
 
         self.pump_address = 8
 
+        self.backup_ml = 2
+
         self.last_dispense = 0
+
+        self.last_command = None
 
     def pump_start(self, channel, direction, steps, ml):
         command = []
@@ -33,15 +37,29 @@ class PumpController(object):
         command.extend([0x00] * 5)
         with self.controller.i2c_lock:
             self.bus.write_i2c_block_data(self.pump_address, 0, command)
+        if self.last_command:
+            channel = self.last_command[0]
+            steps = self.last_command[3:4]
+            ml = int(self.backup_ml).to_bytes(2, "big")
+
+            time.sleep(.1)
+
+            backup_cmd = [channel, 0x02]
+            backup_cmd.extend(steps)
+            backup_cmd.extend(ml)
+
+            with self.controller.i2c_lock:
+                self.bus.write_i2c_block_data(self.pump_address, 0, backup_cmd)
 
     @property
     def status(self):
         with self.controller.i2c_lock:
             status = self.bus.read_i2c_block_data(self.pump_address, 0, 3)
             dispensed = int.from_bytes(bytes(status[1:]), "big")
+            last_diff = dispensed - self.last_dispense
             if dispensed != 0:
                 self.last_dispense = dispensed
-            return status[0], self.last_dispense
+            return status[0], self.last_dispense, last_diff
 
 
 # class PumpController(object):
