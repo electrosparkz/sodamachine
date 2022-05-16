@@ -92,7 +92,9 @@ class BottleInserted(tk.Frame):
         self.config(bg=self.parent.cget('bg'))
         self.button_font = font.Font(family="Arial Bold", size=20)
 
-        self.small_button = tk.Button(self,
+        self.button_frame = tk.Frame(self.parent)
+
+        self.small_button = tk.Button(self.button_frame,
                                       text=f"Small bottle", 
                                       command=lambda: self.set_size("small"),
                                       bg="green",
@@ -101,20 +103,22 @@ class BottleInserted(tk.Frame):
                                       width=1,
                                       height=1)
 
-        self.small_button.grid(column=0, row=0, columnspan=3, rowspan=3, sticky="nsew", padx=10, pady=10)
+        self.small_button.grid(column=0, row=0, sticky="nsew", padx=10, pady=10)
 
-        self.big_button = tk.Button(self,
+        self.big_button = tk.Button(self.button_frame,
                                     text=f"Big bottle", 
-                                    command=lambda: self.set_size("big"),
+                                    command=lambda: self.set_size("large"),
                                     bg="red",
                                     activebackground="red",
                                     font=self.button_font,
                                     width=1,
                                     height=1)
 
-        self.big_button.grid(column=2, row=0, columnspan=3, rowspan=3, sticky="nsew", padx=10, pady=10)
+        self.big_button.grid(column=2, row=0, sticky="nsew", padx=10, pady=10)
 
-        self.place(anchor="c", relx=.5, rely=.55, relheight=.8, relwidth=.8)
+        self.button_frame.place(anchor="c", relx=.5, rely=.55, relheight=.8, relwidth=.8)
+
+        self.place(anchor="c", relx=.5, rely=.5, relheight=1, relwidth=1)
 
     def set_size(self, size):
         print(f"Old size: {self.controller.bottle_size}, new size: {size}")
