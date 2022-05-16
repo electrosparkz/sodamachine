@@ -117,6 +117,7 @@ class BottleInserted(tk.Frame):
         self.place(anchor="c", relx=.5, rely=.55, relheight=.8, relwidth=.8)
 
     def set_size(self, size):
+        print(f"Old size: {self.controller.bottle_size}, new size: {size}")
         self.controller.bottle_size = size
         self.controller.gui.display_flavor_picker(self)
 
