@@ -193,6 +193,10 @@ class FlavorInterfaceButtons(tk.Frame):
                            self.reset_button,
                            self.back_button]:
                 button.config(state="disabled")
+            self.style.configure("LabeledProgressbar",
+                                 text=f"Priming",
+                                 font=self.pbar_font,
+                                 background="green")
             self.start_dispense()
         elif self.state == "dispense":
             self.state = "stop"
