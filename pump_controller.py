@@ -48,7 +48,7 @@ class PumpController(object):
         
         if self.last_command:
             channel = self.last_command[0]
-            steps = self.last_command[3:4]
+            steps = self.last_command[3:5]
             ml = int(self.backup_ml).to_bytes(2, "big")
 
             time.sleep(.1)

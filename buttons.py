@@ -99,7 +99,7 @@ class FlavorInterfaceButtons(tk.Frame):
 
 
         self.dispense_button = tk.Button(self,
-                                         text=f"Dispense\n\nDispense amount:\n{self.dose}ml", 
+                                         text=f"Dispense\n\nAmount:\n{self.dose}ml", 
                                          command=self.dispense_pushed,
                                          bg="green",
                                          activebackground="green",
