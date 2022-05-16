@@ -14,15 +14,15 @@ class Sensors(object):
 
         self.bus = smbus
 
-        self.scale = PyNAU7802.NAU7802()
-        self.setup_scale()
+        # self.scale = PyNAU7802.NAU7802()
+        # self.setup_scale()
 
         self.setup_temp_sensor()
         self.temp = None
         self.update_temp()
 
-        self.prox_sensor = APDS9930(1)
-        self.setup_prox_sensor()
+        # self.prox_sensor = APDS9930(1)
+        # self.setup_prox_sensor()
 
         self.detectpin = 5
 
@@ -38,10 +38,10 @@ class Sensors(object):
         # self.weight_print_thread = threading.Thread(target=self._print_weight_thread, daemon=True)
         # self.weight_print_thread.start()
 
-    def _print_weight_thread(self):
-        while True:
-            print(f"Weight: {self.scale.getWeight()}g")
-            time.sleep(1)
+    # def _print_weight_thread(self):
+    #     while True:
+    #         print(f"Weight: {self.scale.getWeight()}g")
+    #         time.sleep(1)
 
     def setup_bottle_switch(self):
         bottle_switch_thread = threading.Thread(target=lambda x: x._button_thread(), args=(self,),  daemon=True)
@@ -54,21 +54,21 @@ class Sensors(object):
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state
         print("Detect thread started, looping")
-        while True:
-            pass
+        # while True:
+        #     pass
 
-    def setup_scale(self):
-        with self.controller.i2c_lock:
-            if self.scale.begin(self.bus):
-                print("Found scale")
-            self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal']['empty'])
-            self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value']['empty'])
-            time.sleep(1)
-            weight = self.scale.getWeight() * 1000
-        if (weight > 5):
-            print(f"Scale does not seem empty: {weight}g")
-        else:
-            print("Scale is empty")
+    # def setup_scale(self):
+    #     with self.controller.i2c_lock:
+    #         if self.scale.begin(self.bus):
+    #             print("Found scale")
+    #         self.scale.setZeroOffset(self.controller.conf.scale_cal_values['zero_cal']['empty'])
+    #         self.scale.setCalibrationFactor(self.controller.conf.scale_cal_values['cal_value']['empty'])
+    #         time.sleep(1)
+    #         weight = self.scale.getWeight() * 1000
+    #     if (weight > 5):
+    #         print(f"Scale does not seem empty: {weight}g")
+    #     else:
+    #         print("Scale is empty")
 
     def setup_temp_sensor(self):
         config = [0x08, 0x00]
@@ -78,9 +78,9 @@ class Sensors(object):
             byt = self.bus.read_byte(0x38)
         print(byt)
 
-    def setup_prox_sensor(self):
-        self.prox_sensor.enable_proximity_sensor()
-        self.prox_sensor.proximity_gain = 1 
+    # def setup_prox_sensor(self):
+    #     self.prox_sensor.enable_proximity_sensor()
+    #     self.prox_sensor.proximity_gain = 1 
 
     def update_bottle_state(self, channel):
         time.sleep(.2)
@@ -94,11 +94,11 @@ class Sensors(object):
         self.bottle_present = val
         print(f"Took: {time.time() - start_time}")
 
-    @property
-    def proximity(self):
-        with self.controller.i2c_lock:
-            prox_val = self.prox_sensor.proximity
-            return prox_val
+    # @property
+    # def proximity(self):
+    #     with self.controller.i2c_lock:
+    #         prox_val = self.prox_sensor.proximity
+    #         return prox_val
 
     @property
     def bottle_fill(self):
@@ -118,24 +118,24 @@ class Sensors(object):
     #    return avg_weight
         return 0
 
-    def get_bottle_size(self, fresh=False):
-        if (not self._bottle_size or fresh):
-            prox_values = []
-            for x in range(100):
-                val = self.proximity
-                prox_values.append(val)
-                print(f"Raw prox value: {val}")
-            avg_prox = sum(prox_values)/len(prox_values)
-            print(f"Average proximity: {avg_prox}")
+    # def get_bottle_size(self, fresh=False):
+    #     if (not self._bottle_size or fresh):
+    #         prox_values = []
+    #         for x in range(100):
+    #             val = self.proximity
+    #             prox_values.append(val)
+    #             print(f"Raw prox value: {val}")
+    #         avg_prox = sum(prox_values)/len(prox_values)
+    #         print(f"Average proximity: {avg_prox}")
 
-            if (avg_prox < 47):
-                self._bottle_size = "small"
-            elif (48 < avg_prox):
-                self._bottle_size = "large"
-            else:
-                self._bottle_size = "small"
+    #         if (avg_prox < 47):
+    #             self._bottle_size = "small"
+    #         elif (48 < avg_prox):
+    #             self._bottle_size = "large"
+    #         else:
+    #             self._bottle_size = "small"
 
-        return self._bottle_size
+    #     return self._bottle_size
 
     def update_temp(self):
         measure_cmd = [0x33, 0x00]
