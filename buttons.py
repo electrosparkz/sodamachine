@@ -140,10 +140,10 @@ class FlavorInterfaceButtons(tk.Frame):
                                       activebackground="yellow",
                                       font=self.button_font)
 
-        self.up_button_5.grid(row=0, column=3, sticky="nsew", padx=5, pady=10)
+        self.up_button_5.grid(row=0, column=2, sticky="nsew", padx=5, pady=10)
         self.up_button_10.grid(row=0, column=4, sticky="nsew", padx=5, pady=10)
 
-        self.down_button_5.grid(row=2, column=3, sticky="nsew", padx=5, pady=10)
+        self.down_button_5.grid(row=2, column=2, sticky="nsew", padx=5, pady=10)
         self.down_button_10.grid(row=2, column=4, sticky="nsew", padx=5, pady=10)
 
         self.reset_button.grid(row=1, column=3, columnspan=2, sticky="nsew", padx=10, pady=10)
@@ -186,7 +186,12 @@ class FlavorInterfaceButtons(tk.Frame):
         if self.state == "idle":
             self.state = "dispense"
             self.dispense_button.config(bg="red", activebackground="red", text=f"Dispensing\n(Press to stop)\n\n")
-            for button in [self.up_button, self.down_button, self.reset_button, self.back_button]:
+            for button in [self.up_button_5,
+                           self.up_button_10,
+                           self.down_button_5,
+                           self.down_button_10,
+                           self.reset_button,
+                           self.back_button]:
                 button.config(state="disabled")
             self.start_dispense()
         elif self.state == "dispense":
