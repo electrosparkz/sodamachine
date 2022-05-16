@@ -76,9 +76,9 @@ class FlavorInterfaceButtons(tk.Frame):
 
         super().__init__(self.parent, bg=self.parent.cget('bg'), *args, **kwargs)
 
-        for x in range(4):
+        for x in range(5):
             self.columnconfigure(x, weight=1)
-        for x in range(4):
+        for x in range(5):
             self.rowconfigure(x, weight=1)
 
         self.button_font = font.Font(family="Arial Bold", size=20)
@@ -140,10 +140,10 @@ class FlavorInterfaceButtons(tk.Frame):
                                       activebackground="yellow",
                                       font=self.button_font)
 
-        self.up_button_5.grid(row=0, column=2, sticky="nsew", padx=5, pady=10)
+        self.up_button_5.grid(row=0, column=3, sticky="nsew", padx=5, pady=10)
         self.up_button_10.grid(row=0, column=4, sticky="nsew", padx=5, pady=10)
 
-        self.down_button_5.grid(row=2, column=2, sticky="nsew", padx=5, pady=10)
+        self.down_button_5.grid(row=2, column=3, sticky="nsew", padx=5, pady=10)
         self.down_button_10.grid(row=2, column=4, sticky="nsew", padx=5, pady=10)
 
         self.reset_button.grid(row=1, column=3, columnspan=2, sticky="nsew", padx=10, pady=10)
@@ -232,14 +232,17 @@ class FlavorInterfaceButtons(tk.Frame):
                 self.dispense_button.config(text="HALTED", state="disabled")
                 self.style.configure("LabeledProgressbar", background="red")
                 self.back_button.configure(state="normal")
+                self.parent.controller.pc.pump_stop(self.pump_index)
             
             if self.state == "done":
                 self.dispense_button.config(text="Done!", state="disabled", bg="green", activebackground="green")
                 self.style.configure("LabeledProgressbar", text="Done!", font=self.pbar_font)
                 self.progress_bar['value'] = 100
                 self.back_button.configure(state="normal")
-        finally:
+                self.parent.controller.pc.pump_stop(self.pump_index)
+        except:
             self.parent.controller.pc.pump_stop(self.pump_index)
+            raise
 
     def _update_syrup_remaining(self, ml_dispensed):
         print(f"Update syrup: {ml_dispensed}")
