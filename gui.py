@@ -210,6 +210,11 @@ class FlavorPicker(tk.Frame):
                 grid_x = 1
                 grid_y = 0
 
+        self.label_font = font.Font(family="Arial Bold", size=26)
+
+        self.size_label = tk.Label(self, text=f"Bottle: {self.controller.bottle_size}", fg="white", bg=self.parent.cget('bg'), font=self.label_font)
+        self.size_label.place(anchor="n", relx=.5, rely=.04)
+
         self.place(anchor="c", relx=.5, rely=.5)
 
     def picked_flavor(self, button):
