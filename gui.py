@@ -114,7 +114,7 @@ class BottleInserted(tk.Frame):
 
         self.big_button.grid(column=2, row=0, columnspan=3, rowspan=3, sticky="nsew", padx=10, pady=10)
 
-        self.place(anchor="c", relx=.5, rely=.5)
+        self.place(anchor="c", relx=.5, rely=.55, relheight=.8, relwidth=.8)
 
     def set_size(self, size):
         self.controller.bottle_size = size

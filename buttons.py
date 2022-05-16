@@ -140,13 +140,13 @@ class FlavorInterfaceButtons(tk.Frame):
                                       activebackground="yellow",
                                       font=self.button_font)
 
-        self.up_button_5.grid(row=0, column=3, sticky="nsew", padx=10, pady=10)
-        self.up_button_10.grid(row=0, column=4, sticky="nsew", padx=10, pady=10)
+        self.up_button_5.grid(row=0, column=3, sticky="nsew", padx=5, pady=10)
+        self.up_button_10.grid(row=0, column=4, sticky="nsew", padx=5, pady=10)
 
-        self.down_button_5.grid(row=2, column=3, sticky="nsew", padx=10, pady=10)
-        self.down_button_10.grid(row=2, column=4, sticky="nsew", padx=10, pady=10)
+        self.down_button_5.grid(row=2, column=3, sticky="nsew", padx=5, pady=10)
+        self.down_button_10.grid(row=2, column=4, sticky="nsew", padx=5, pady=10)
 
-        self.reset_button.grid(row=1, column=3, sticky="nsew", padx=10, pady=10)
+        self.reset_button.grid(row=1, column=3, columnspan=2, sticky="nsew", padx=10, pady=10)
 
         self.style = ttk.Style(self)
         self.style.layout("LabeledProgressbar",
@@ -162,7 +162,7 @@ class FlavorInterfaceButtons(tk.Frame):
                              text=f"Ready",
                              font=self.pbar_font,
                              background="green")
-        self.progress_bar.grid(row=3, column=0, columnspan=4, sticky="nsew", padx=10, pady=10)
+        self.progress_bar.grid(row=3, column=0, columnspan=5, sticky="nsew", padx=10, pady=10)
 
         self.place(anchor="c", relx=.5, rely=.55, relheight=.8, relwidth=.8)
 
