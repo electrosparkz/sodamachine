@@ -9,13 +9,14 @@ class PumpController(object):
 
         self.pump_address = 8
 
-        self.backup_ml = 2
+        self.backup_ml = 5
 
         self.last_dispense = 0
 
         self.last_command = None
 
     def pump_start(self, channel, direction, steps, ml):
+        ml += self.backup_ml
         command = []
         command.append(channel)
         if direction == "F":

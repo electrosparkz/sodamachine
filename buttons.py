@@ -204,39 +204,41 @@ class FlavorInterfaceButtons(tk.Frame):
         self._dispense_loop()
 
     def _dispense_loop(self):
-        if self.state == "dispense":
-            # time_remaining = round(self.pump_runtime - (time.time() - self.dispense_started), 2)
-            time_elapsed = round(time.time() - self.dispense_started, 2)
+        try:
+            if self.state == "dispense":
+                # time_remaining = round(self.pump_runtime - (time.time() - self.dispense_started), 2)
+                time_elapsed = round(time.time() - self.dispense_started, 2)
 
-            pump_status, ml_dispensed, last_diff = self.parent.controller.pc.status
+                pump_status, ml_dispensed, last_diff = self.parent.controller.pc.status
 
-            self._update_syrup_remaining(last_diff)
+                self._update_syrup_remaining(last_diff)
 
-            ml_remaining = self.dose - ml_dispensed
-            pct_done = 100 - round((ml_remaining / self.dose) * 100)
+                ml_remaining = self.dose - ml_dispensed
+                pct_done = 100 - round((ml_remaining / self.dose) * 100)
 
-            print(f"{time_elapsed}, ml: {ml_remaining}, pct: {pct_done}, dose: {self.dose}")
+                print(f"{time_elapsed}, ml: {ml_remaining}, pct: {pct_done}, dose: {self.dose}")
 
-            if pump_status == 0x00:
-                self.state = "done"
-            else:
-                self.style.configure("LabeledProgressbar",
-                                     text=f"{self.dose - ml_remaining:.2f}/{self.dose}ml - {pct_done}%",
-                                     font=self.pbar_font,
-                                     background="green")
-                self.progress_bar['value'] = pct_done
-                self.after(300, self._dispense_loop)
-        elif self.state == "stop":
-            self.parent.controller.pc.pump_stop(self.pump_index)
-            self.dispense_button.config(text="HALTED", state="disabled")
-            self.style.configure("LabeledProgressbar", background="red")
-            self.back_button.configure(state="normal")
-        
-        if self.state == "done":
-            self.dispense_button.config(text="Done!", state="disabled", bg="green", activebackground="green")
-            self.style.configure("LabeledProgressbar", text="Done!", font=self.pbar_font)
-            self.progress_bar['value'] = 100
-            self.back_button.configure(state="normal")
+                if pump_status == 0x00:
+                    self.state = "done"
+                else:
+                    self.style.configure("LabeledProgressbar",
+                                         text=f"{self.dose - ml_remaining:.2f}/{self.dose}ml - {pct_done}%",
+                                         font=self.pbar_font,
+                                         background="green")
+                    self.progress_bar['value'] = pct_done
+                    self.after(300, self._dispense_loop)
+            elif self.state == "stop":
+                self.parent.controller.pc.pump_stop(self.pump_index)
+                self.dispense_button.config(text="HALTED", state="disabled")
+                self.style.configure("LabeledProgressbar", background="red")
+                self.back_button.configure(state="normal")
+            
+            if self.state == "done":
+                self.dispense_button.config(text="Done!", state="disabled", bg="green", activebackground="green")
+                self.style.configure("LabeledProgressbar", text="Done!", font=self.pbar_font)
+                self.progress_bar['value'] = 100
+                self.back_button.configure(state="normal")
+        finally:
             self.parent.controller.pc.pump_stop(self.pump_index)
 
     def _update_syrup_remaining(self, ml_dispensed):
