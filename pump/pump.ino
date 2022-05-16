@@ -156,6 +156,13 @@ int byteCombine(byte high, byte low)
 
 void ramp(){
   float revs_per = (steps_per_rev * revs);
+  if (currentDir == 0x02) {
+    if (last_ramp == 0) {
+      stepper.setSpeed(revs_per);
+      last_ramp = 1;
+    }
+    return;
+  }
   float current_speed = stepper.speed();
   if (current_speed == revs_per){
     return;

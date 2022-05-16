@@ -36,7 +36,7 @@ class PumpController(object):
         with self.controller.i2c_lock:
             self.bus.write_i2c_block_data(self.pump_address, 0, command)
 
-    def pump_stop(self, channel):
+    def pump_stop(self, channel, backup=True):
         command = []
         command.append(channel)
         command.extend([0x00] * 5)
@@ -46,9 +46,9 @@ class PumpController(object):
         with self.controller.i2c_lock:
             self.bus.write_i2c_block_data(self.pump_address, 0, command)
         
-        if self.last_command:
+        if self.last_command and backup:
             channel = self.last_command[0]
-            steps = self.last_command[3:5]
+            steps = self.last_command[2:4]
             ml = int(self.backup_ml).to_bytes(2, "big")
 
             time.sleep(.1)

@@ -217,6 +217,10 @@ class FlavorPicker(tk.Frame):
 
         self.place(anchor="c", relx=.5, rely=.5)
 
+    def destroy(self):
+        self.size_label.destroy()
+        super().destroy()
+
     def picked_flavor(self, button):
         self.controller.gui.display_picked_flavor(button)
 

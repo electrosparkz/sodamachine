@@ -29,7 +29,7 @@ class SodaController(object):
         self.gui.display_bottle_inserted()
 
     def bottle_removed(self):
-        self.pc.pump_stop(0)
+        self.pc.pump_stop(0, backup=False)
         self.gui.display_goodbye()
 
     def run(self):
@@ -37,7 +37,7 @@ class SodaController(object):
         self.gui.mainloop()
 
     def shutdown(self, signal, frame):
-        self.pc.pump_stop(0)
+        self.pc.pump_stop(0, backup=False)
         sys.exit(0)
 
 
