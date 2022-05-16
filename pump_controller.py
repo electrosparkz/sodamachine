@@ -57,6 +57,10 @@ class PumpController(object):
         with self.controller.i2c_lock:
             status = self.bus.read_i2c_block_data(self.pump_address, 0, 3)
             dispensed = int.from_bytes(bytes(status[1:]), "big")
+            if dispensed > self.backup_ml:
+                dispensed -= self.backup_ml
+            else:
+                dispensed = 0
             last_diff = dispensed - self.last_dispense
             if dispensed != 0:
                 self.last_dispense = dispensed

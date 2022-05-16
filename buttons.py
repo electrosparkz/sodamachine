@@ -168,7 +168,7 @@ class FlavorInterfaceButtons(tk.Frame):
 
 
     def _update_button_text(self):
-        self.dispense_button.config(text=f"Dispense\n\nDispense amount:\n{self.dose}ml")
+        self.dispense_button.config(text=f"Dispense\n\nAmount:\n{self.dose}ml")
 
     def add_inc(self, val):
         self.dose += val
