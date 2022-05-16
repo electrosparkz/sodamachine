@@ -29,6 +29,10 @@ class PumpController(object):
         ml_bytes = int(ml).to_bytes(2, "big")
         command.append(ml_bytes[0])
         command.append(ml_bytes[1])
+
+        self.last_command = command
+
+        print(f"Pump start command: {command}")
         with self.controller.i2c_lock:
             self.bus.write_i2c_block_data(self.pump_address, 0, command)
 
@@ -36,8 +40,12 @@ class PumpController(object):
         command = []
         command.append(channel)
         command.extend([0x00] * 5)
+
+        print("Pump stop")
+        print(f"Last command: {self.last_command}")
         with self.controller.i2c_lock:
             self.bus.write_i2c_block_data(self.pump_address, 0, command)
+        
         if self.last_command:
             channel = self.last_command[0]
             steps = self.last_command[3:4]
@@ -48,6 +56,8 @@ class PumpController(object):
             backup_cmd = [channel, 0x02]
             backup_cmd.extend(steps)
             backup_cmd.extend(ml)
+
+            print(f"Backup command: {backup_cmd}")
 
             with self.controller.i2c_lock:
                 self.bus.write_i2c_block_data(self.pump_address, 0, backup_cmd)
