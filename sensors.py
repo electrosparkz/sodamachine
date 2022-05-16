@@ -54,8 +54,8 @@ class Sensors(object):
         self.bottle_switch.when_activated = self.update_bottle_state
         self.bottle_switch.when_deactivated = self.update_bottle_state
         print("Detect thread started, looping")
-        # while True:
-        #     pass
+        while True:
+            time.sleep(5)
 
     # def setup_scale(self):
     #     with self.controller.i2c_lock:

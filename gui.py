@@ -92,7 +92,13 @@ class BottleInserted(tk.Frame):
         self.config(bg=self.parent.cget('bg'))
         self.button_font = font.Font(family="Arial Bold", size=20)
 
-        self.button_frame = tk.Frame(self.parent)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+
+        self.rowconfigure(0, weight=1)
+
+        self.button_frame = tk.Frame(self)
+        self.button_frame.config(bg=self.parent.cget('bg'))
 
         self.small_button = tk.Button(self.button_frame,
                                       text=f"Small bottle", 
