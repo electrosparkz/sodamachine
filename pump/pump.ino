@@ -1,21 +1,12 @@
-// ConstantSpeed.pde
-// -*- mode: C++ -*-
-//
-// Shows how to run AccelStepper in the simplest,
-// fixed speed mode with no accelerations
-/// \author  Mike McCauley (mikem@airspayce.com)
-// Copyright (C) 2009 Mike McCauley
-// $Id: ConstantSpeed.pde,v 1.1 2011/01/05 01:51:01 mikem Exp mikem $
-
 #include <AccelStepper.h>
 #include <Wire.h>
 
-AccelStepper stepper(AccelStepper::DRIVER, 3, 2); // Defaults to AccelStepper::FULL4WIRE (4 pins) on 2, 3, 4, 5
+AccelStepper stepper(AccelStepper::DRIVER, 3, 2);
 
 int channels[8] = {4, 5, 6, 7, 8, 9, 10, 11};
 
 int steps_per_rev = 400;
-float revs = 4.2;
+float revs = 3;
 
 int currentChannel = 255;
 byte currentDir = 0x00;
@@ -158,7 +149,7 @@ void ramp(){
   float revs_per = (steps_per_rev * revs);
   if (currentDir == 0x02) {
     if (last_ramp == 0) {
-      stepper.setSpeed(revs_per);
+      stepper.setSpeed(-revs_per);
       last_ramp = 1;
     }
     return;
@@ -204,7 +195,7 @@ void loop(){
 //      Serial.print(" - speed: ");
 //      Serial.println(stepper.speed());
 //    }
-    if(abs(stepper.currentPosition()) >= dispenseSteps) {
+    if(abs(stepper.currentPosition()) >= abs(dispenseSteps)) {
       pumpStop();
     }
   }
